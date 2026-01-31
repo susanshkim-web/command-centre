@@ -1461,7 +1461,9 @@
             const month = appointmentMonth.getMonth();
             
             const monthAppointments = data.appointments.filter(a => {
-                const aptDate = new Date(a.date);
+                // Parse date as local date to avoid timezone issues
+                const [y, m, d] = a.date.split('-').map(Number);
+                const aptDate = new Date(y, m - 1, d);
                 return aptDate.getMonth() === month && aptDate.getFullYear() === year;
             });
             
@@ -1474,7 +1476,9 @@
                               'July', 'August', 'September', 'October', 'November', 'December'];
             
             list.innerHTML = monthAppointments.map(apt => {
-                const aptDate = new Date(apt.date);
+                // Parse date as local date to avoid timezone issues
+                const [y, m, d] = apt.date.split('-').map(Number);
+                const aptDate = new Date(y, m - 1, d);
                 const dateStr = `${monthNames[aptDate.getMonth()]} ${aptDate.getDate()}, ${aptDate.getFullYear()}`;
                 
                 return `
