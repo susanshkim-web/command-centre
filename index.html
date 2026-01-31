@@ -733,8 +733,8 @@
 
         <div class="tabs">
             <button class="tab active" data-tab="shopping">Shopping</button>
-            <button class="tab" data-tab="birthdays">Birthdays</button>
             <button class="tab" data-tab="appointments">Appointments</button>
+            <button class="tab" data-tab="birthdays">Birthdays</button>
             <button class="tab" data-tab="recipes">Recipes</button>
         </div>
 
@@ -746,22 +746,6 @@
                     <button class="btn btn-primary" onclick="openAddStoreModal()">+ Add Store</button>
                 </div>
                 <div class="store-grid" id="storeGrid"></div>
-            </div>
-        </div>
-
-        <!-- Birthdays Panel -->
-        <div class="panel" id="birthdays">
-            <div class="section">
-                <div class="section-header">
-                    <h2>Birthdays</h2>
-                    <button class="btn btn-primary" onclick="openAddBirthdayModal()">+ Add Birthday</button>
-                </div>
-                <div class="month-selector">
-                    <button class="btn" onclick="changeMonth(-1)">←</button>
-                    <div class="current-month" id="currentMonth"></div>
-                    <button class="btn" onclick="changeMonth(1)">→</button>
-                </div>
-                <div class="birthday-list" id="birthdayList"></div>
             </div>
         </div>
 
@@ -786,6 +770,22 @@
                 </div>
 
                 <div class="appointments-list" id="appointmentsList"></div>
+            </div>
+        </div>
+
+        <!-- Birthdays Panel -->
+        <div class="panel" id="birthdays">
+            <div class="section">
+                <div class="section-header">
+                    <h2>Birthdays</h2>
+                    <button class="btn btn-primary" onclick="openAddBirthdayModal()">+ Add Birthday</button>
+                </div>
+                <div class="month-selector">
+                    <button class="btn" onclick="changeMonth(-1)">←</button>
+                    <div class="current-month" id="currentMonth"></div>
+                    <button class="btn" onclick="changeMonth(1)">→</button>
+                </div>
+                <div class="birthday-list" id="birthdayList"></div>
             </div>
         </div>
 
