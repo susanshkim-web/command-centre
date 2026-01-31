@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Command Center</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', -apple-system, sans-serif;
+            background: #0d0d0d;
+            color: #e8e6e3;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        header {
+            margin-bottom: 80px;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 500;
+            color: #ffffff;
+            letter-spacing: -0.03em;
+            text-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 60px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 2px;
+        }
+
+        .tab {
+            padding: 12px 0;
+            background: none;
+            border: none;
+            color: #6b6b6b;
+            cursor: pointer;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            border-bottom: 2px solid transparent;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .tab:hover {
+            color: #b8b8b8;
+        }
+
+        .tab.active {
+            color: #ffffff;
+            border-bottom-color: rgba(255, 255, 255, 0.8);
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .panel {
+            display: none;
+        }
+
+        .panel.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section {
+            background: transparent;
+            padding: 0;
+            margin-bottom: 80px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 28px;
+            font-weight: 500;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+        }
+
+        .btn {
+            padding: 11px 24px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e8e6e3;
+            cursor: pointer;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-primary {
+            background: #ffffff;
+            color: #0d0d0d;
+            border-color: #ffffff;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: #f0f0f0;
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .btn-small {
+            padding: 7px 16px;
+            font-size: 12px;
+        }
+
+        .btn-danger {
+            background: rgba(255, 70, 70, 0.1);
+            color: #ff9999;
+            border-color: rgba(255, 70, 70, 0.3);
+        }
+
+        .btn-danger:hover {
+            background: rgba(255, 70, 70, 0.2);
+            border-color: rgba(255, 70, 70, 0.5);
+            box-shadow: 0 0 20px rgba(255, 70, 70, 0.2);
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 16px 0;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 15px;
+            margin-bottom: 28px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-bottom-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.1);
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #4a4a4a;
+        }
+
+        textarea {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 16px;
+            resize: vertical;
+            min-height: 120px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        textarea:focus {
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.04);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+        }
+
+        .list-item {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 18px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .list-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .list-item-content {
+            flex: 1;
+            font-size: 15px;
+        }
+
+        .list-item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .checkbox {
+            width: 18px;
+            height: 18px;
+            margin-right: 14px;
+            cursor: pointer;
+            accent-color: #ffffff;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            opacity: 0.3;
+        }
+
+        .store-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+        }
+
+        .store-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 28px;
+            backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .store-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(13, 13, 13, 0.95);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: #0d0d0d;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 50px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 40px;
+        }
+
+        .close {
+            background: none;
+            border: none;
+            color: #6b6b6b;
+            font-size: 28px;
+            cursor: pointer;
+            font-weight: 300;
+            line-height: 1;
+            transition: all 0.3s ease;
+        }
+
+        .close:hover {
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .birthday-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .birthday-item {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 22px 24px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .birthday-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .birthday-info {
+            flex: 1;
+        }
+
+        .birthday-name {
+            font-size: 18px;
+            font-weight: 500;
+            color: #ffffff;
+            margin-bottom: 6px;
+        }
+
+        .birthday-date {
+            font-family: 'JetBrains Mono', monospace;
+            color: #8a8a8a;
+            font-size: 13px;
+            letter-spacing: 0.03em;
+        }
+
+        .upcoming {
+            border-left: 2px solid #ffffff;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+        }
+
+        .recipe-item {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .recipe-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .recipe-name {
+            font-size: 20px;
+            font-weight: 500;
+            color: #ffffff;
+            margin-bottom: 14px;
+        }
+
+        .recipe-notes {
+            color: #b8b8b8;
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .recipe-date {
+            font-family: 'JetBrains Mono', monospace;
+            color: #6b6b6b;
+            font-size: 12px;
+            letter-spacing: 0.03em;
+        }
+
+        .month-selector {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .month-selector button {
+            padding: 10px 18px;
+            font-size: 16px;
+        }
+
+        .current-month {
+            font-size: 22px;
+            font-weight: 500;
+            color: #ffffff;
+            flex: 1;
+            text-align: center;
+            letter-spacing: -0.01em;
+        }
+
+        .empty-state {
+            color: #4a4a4a;
+            font-size: 15px;
+            font-style: italic;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .item-count {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            color: #6b6b6b;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 0.05em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 24px;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            .tabs {
+                gap: 24px;
+            }
+
+            .store-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                padding: 32px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Command Center</h1>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="shopping">Shopping</button>
+            <button class="tab" data-tab="birthdays">Birthdays</button>
+            <button class="tab" data-tab="recipes">Recipes</button>
+        </div>
+
+        <!-- Shopping Panel -->
+        <div class="panel active" id="shopping">
+            <div class="section">
+                <div class="section-header">
+                    <h2>Shopping Lists</h2>
+                    <button class="btn btn-primary" onclick="openAddStoreModal()">+ Add Store</button>
+                </div>
+                <div class="store-grid" id="storeGrid"></div>
+            </div>
+        </div>
+
+        <!-- Birthdays Panel -->
+        <div class="panel" id="birthdays">
+            <div class="section">
+                <div class="section-header">
+                    <h2>Birthdays</h2>
+                    <button class="btn btn-primary" onclick="openAddBirthdayModal()">+ Add Birthday</button>
+                </div>
+                <div class="month-selector">
+                    <button class="btn" onclick="changeMonth(-1)">←</button>
+                    <div class="current-month" id="currentMonth"></div>
+                    <button class="btn" onclick="changeMonth(1)">→</button>
+                </div>
+                <div class="birthday-list" id="birthdayList"></div>
+            </div>
+        </div>
+
+        <!-- Recipes Panel -->
+        <div class="panel" id="recipes">
+            <div class="section">
+                <div class="section-header">
+                    <h2>Recipe Log</h2>
+                    <button class="btn btn-primary" onclick="openAddRecipeModal()">+ Add Recipe</button>
+                </div>
+                <div id="recipeList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Store Modal -->
+    <div class="modal" id="addStoreModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Store</h2>
+                <button class="close" onclick="closeModal('addStoreModal')">&times;</button>
+            </div>
+            <input type="text" id="storeName" placeholder="Store name">
+            <button class="btn btn-primary" onclick="addStore()">Add Store</button>
+        </div>
+    </div>
+
+    <!-- Add Item Modal -->
+    <div class="modal" id="addItemModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Item</h2>
+                <button class="close" onclick="closeModal('addItemModal')">&times;</button>
+            </div>
+            <input type="text" id="itemName" placeholder="Item name">
+            <button class="btn btn-primary" onclick="addItem()">Add Item</button>
+        </div>
+    </div>
+
+    <!-- Add Birthday Modal -->
+    <div class="modal" id="addBirthdayModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Birthday</h2>
+                <button class="close" onclick="closeModal('addBirthdayModal')">&times;</button>
+            </div>
+            <input type="text" id="birthdayName" placeholder="Name">
+            <input type="date" id="birthdayDate" placeholder="Birthday">
+            <button class="btn btn-primary" onclick="addBirthday()">Add Birthday</button>
+        </div>
+    </div>
+
+    <!-- Add Recipe Modal -->
+    <div class="modal" id="addRecipeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Recipe</h2>
+                <button class="close" onclick="closeModal('addRecipeModal')">&times;</button>
+            </div>
+            <input type="text" id="recipeName" placeholder="Recipe name">
+            <textarea id="recipeNotes" placeholder="What did you like? What would you change next time?" rows="4"></textarea>
+            <button class="btn btn-primary" onclick="addRecipe()">Save Recipe</button>
+        </div>
+    </div>
+
+    <script>
+        let data = {
+            stores: {},
+            birthdays: [],
+            recipes: []
+        };
+
+        let currentStore = null;
+        let currentMonth = new Date();
+
+        // Load data from storage
+        async function loadData() {
+            try {
+                const result = await window.storage.get('command-center-data');
+                if (result && result.value) {
+                    data = JSON.parse(result.value);
+                }
+            } catch (error) {
+                console.log('No existing data, starting fresh');
+            }
+            renderAll();
+        }
+
+        // Save data to storage
+        async function saveData() {
+            try {
+                await window.storage.set('command-center-data', JSON.stringify(data));
+            } catch (error) {
+                console.error('Error saving data:', error);
+            }
+        }
+
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Modal functions
+        function openAddStoreModal() {
+            document.getElementById('addStoreModal').classList.add('active');
+            document.getElementById('storeName').value = '';
+        }
+
+        function openAddItemModal(storeName) {
+            currentStore = storeName;
+            document.getElementById('addItemModal').classList.add('active');
+            document.getElementById('itemName').value = '';
+        }
+
+        function openAddBirthdayModal() {
+            document.getElementById('addBirthdayModal').classList.add('active');
+            document.getElementById('birthdayName').value = '';
+            document.getElementById('birthdayDate').value = '';
+        }
+
+        function openAddRecipeModal() {
+            document.getElementById('addRecipeModal').classList.add('active');
+            document.getElementById('recipeName').value = '';
+            document.getElementById('recipeNotes').value = '';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Shopping functions
+        function addStore() {
+            const name = document.getElementById('storeName').value.trim();
+            if (!name) return;
+            
+            if (!data.stores[name]) {
+                data.stores[name] = [];
+            }
+            saveData();
+            renderStores();
+            closeModal('addStoreModal');
+        }
+
+        function addItem() {
+            const itemName = document.getElementById('itemName').value.trim();
+            if (!itemName || !currentStore) return;
+            
+            data.stores[currentStore].push({
+                name: itemName,
+                completed: false,
+                id: Date.now()
+            });
+            saveData();
+            renderStores();
+            closeModal('addItemModal');
+        }
+
+        function toggleItem(storeName, itemId) {
+            const item = data.stores[storeName].find(i => i.id === itemId);
+            if (item) {
+                item.completed = !item.completed;
+                saveData();
+                renderStores();
+            }
+        }
+
+        function deleteItem(storeName, itemId) {
+            data.stores[storeName] = data.stores[storeName].filter(i => i.id !== itemId);
+            saveData();
+            renderStores();
+        }
+
+        function deleteStore(storeName) {
+            if (confirm(`Delete ${storeName} and all its items?`)) {
+                delete data.stores[storeName];
+                saveData();
+                renderStores();
+            }
+        }
+
+        function renderStores() {
+            const grid = document.getElementById('storeGrid');
+            grid.innerHTML = '';
+            
+            Object.keys(data.stores).forEach(storeName => {
+                const storeDiv = document.createElement('div');
+                storeDiv.className = 'store-card';
+                
+                const items = data.stores[storeName];
+                const activeItems = items.filter(i => !i.completed);
+                
+                storeDiv.innerHTML = `
+                    <div class="section-header">
+                        <h2>${storeName}</h2>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-small" onclick="openAddItemModal('${storeName}')">+ Item</button>
+                            <button class="btn btn-small btn-danger" onclick="deleteStore('${storeName}')">Delete</button>
+                        </div>
+                    </div>
+                    <div>
+                        ${items.length === 0 ? '<p class="empty-state">No items yet</p>' : 
+                          items.map(item => `
+                            <div class="list-item">
+                                <div class="list-item-content" style="display: flex; align-items: center;">
+                                    <input type="checkbox" class="checkbox" 
+                                           ${item.completed ? 'checked' : ''} 
+                                           onchange="toggleItem('${storeName}', ${item.id})">
+                                    <span class="${item.completed ? 'completed' : ''}">${item.name}</span>
+                                </div>
+                                <button class="btn btn-small btn-danger" onclick="deleteItem('${storeName}', ${item.id})">×</button>
+                            </div>
+                          `).join('')}
+                    </div>
+                    ${activeItems.length > 0 ? `<div class="item-count">${activeItems.length} item${activeItems.length !== 1 ? 's' : ''} to buy</div>` : ''}
+                `;
+                
+                grid.appendChild(storeDiv);
+            });
+            
+            if (Object.keys(data.stores).length === 0) {
+                grid.innerHTML = '<p class="empty-state">No stores yet. Add your first store to get started.</p>';
+            }
+        }
+
+        // Birthday functions
+        function addBirthday() {
+            const name = document.getElementById('birthdayName').value.trim();
+            const date = document.getElementById('birthdayDate').value;
+            
+            if (!name || !date) return;
+            
+            data.birthdays.push({
+                name: name,
+                date: date,
+                id: Date.now()
+            });
+            
+            data.birthdays.sort((a, b) => {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+                return dateA.getMonth() - dateB.getMonth() || dateA.getDate() - dateB.getDate();
+            });
+            
+            saveData();
+            renderBirthdays();
+            closeModal('addBirthdayModal');
+        }
+
+        function deleteBirthday(id) {
+            data.birthdays = data.birthdays.filter(b => b.id !== id);
+            saveData();
+            renderBirthdays();
+        }
+
+        function changeMonth(delta) {
+            currentMonth.setMonth(currentMonth.getMonth() + delta);
+            renderBirthdays();
+        }
+
+        function renderBirthdays() {
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                              'July', 'August', 'September', 'October', 'November', 'December'];
+            
+            document.getElementById('currentMonth').textContent = 
+                `${monthNames[currentMonth.getMonth()]} ${currentMonth.getFullYear()}`;
+            
+            const list = document.getElementById('birthdayList');
+            const targetMonth = currentMonth.getMonth();
+            
+            const birthdays = data.birthdays.filter(b => {
+                const bDate = new Date(b.date);
+                return bDate.getMonth() === targetMonth;
+            });
+            
+            if (birthdays.length === 0) {
+                list.innerHTML = '<p class="empty-state">No birthdays this month</p>';
+                return;
+            }
+            
+            const today = new Date();
+            const isCurrentMonth = today.getMonth() === targetMonth && 
+                                  today.getFullYear() === currentMonth.getFullYear();
+            
+            list.innerHTML = birthdays.map(birthday => {
+                const bDate = new Date(birthday.date);
+                const isUpcoming = isCurrentMonth && bDate.getDate() >= today.getDate();
+                
+                return `
+                    <div class="birthday-item ${isUpcoming ? 'upcoming' : ''}">
+                        <div class="birthday-info">
+                            <div class="birthday-name">${birthday.name}</div>
+                            <div class="birthday-date">${monthNames[bDate.getMonth()]} ${bDate.getDate()}</div>
+                        </div>
+                        <button class="btn btn-small btn-danger" onclick="deleteBirthday(${birthday.id})">Delete</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Recipe functions
+        function addRecipe() {
+            const name = document.getElementById('recipeName').value.trim();
+            const notes = document.getElementById('recipeNotes').value.trim();
+            
+            if (!name) return;
+            
+            data.recipes.unshift({
+                name: name,
+                notes: notes,
+                date: new Date().toISOString(),
+                id: Date.now()
+            });
+            
+            saveData();
+            renderRecipes();
+            closeModal('addRecipeModal');
+        }
+
+        function deleteRecipe(id) {
+            data.recipes = data.recipes.filter(r => r.id !== id);
+            saveData();
+            renderRecipes();
+        }
+
+        function renderRecipes() {
+            const list = document.getElementById('recipeList');
+            
+            if (data.recipes.length === 0) {
+                list.innerHTML = '<p class="empty-state">No recipes yet. Add your first recipe to start tracking what you cook.</p>';
+                return;
+            }
+            
+            list.innerHTML = data.recipes.map(recipe => {
+                const date = new Date(recipe.date);
+                return `
+                    <div class="recipe-item">
+                        <div class="recipe-name">${recipe.name}</div>
+                        ${recipe.notes ? `<div class="recipe-notes">${recipe.notes}</div>` : ''}
+                        <div class="recipe-date">Cooked on ${date.toLocaleDateString()}</div>
+                        <button class="btn btn-small btn-danger" style="margin-top: 8px;" onclick="deleteRecipe(${recipe.id})">Delete</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderAll() {
+            renderStores();
+            renderBirthdays();
+            renderRecipes();
+        }
+
+        // Initialize
+        loadData();
+    </script>
+</body>
+</html>
