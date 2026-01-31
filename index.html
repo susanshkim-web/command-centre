@@ -423,9 +423,225 @@
             letter-spacing: 0.05em;
         }
 
+        /* Appointments styles */
+        .calendar-container {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-month {
+            font-size: 20px;
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .calendar-day-label {
+            text-align: center;
+            font-size: 11px;
+            color: #6b6b6b;
+            font-family: 'JetBrains Mono', monospace;
+            padding: 8px 0;
+            letter-spacing: 0.05em;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            padding: 4px;
+        }
+
+        .calendar-day:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .calendar-day.other-month {
+            opacity: 0.3;
+        }
+
+        .calendar-day.today {
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .calendar-day-number {
+            font-size: 13px;
+            color: #e8e6e3;
+            margin-bottom: 2px;
+        }
+
+        .calendar-day-dots {
+            display: flex;
+            gap: 2px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 100%;
+        }
+
+        .calendar-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+        }
+
+        .appointments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .appointment-detail {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 20px;
+            transition: all 0.3s ease;
+            border-left: 3px solid;
+            cursor: pointer;
+        }
+
+        .appointment-detail:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .appointment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .appointment-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .appointment-time {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: #8a8a8a;
+            margin-bottom: 8px;
+        }
+
+        .appointment-type {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+            background: rgba(255, 255, 255, 0.1);
+            margin-bottom: 12px;
+        }
+
+        .appointment-notes {
+            color: #b8b8b8;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .recurring-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: #8a8a8a;
+            margin-left: 12px;
+        }
+
+        .type-manager {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .type-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .type-tag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 3px;
+            font-size: 13px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .type-color-box {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+
+        .modal-section {
+            margin-bottom: 24px;
+        }
+
+        .modal-section-title {
+            font-size: 13px;
+            color: #8a8a8a;
+            margin-bottom: 12px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #e8e6e3;
+            font-size: 14px;
+            cursor: pointer;
+            margin-bottom: 16px;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
         @media (max-width: 768px) {
             .container {
-                padding: 40px 24px;
+                padding: 40px 20px;
             }
 
             h1 {
@@ -433,15 +649,78 @@
             }
 
             .tabs {
-                gap: 24px;
+                gap: 20px;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .tab {
+                font-size: 12px;
+                white-space: nowrap;
             }
 
             .store-grid {
                 grid-template-columns: 1fr;
             }
 
+            .store-card {
+                padding: 20px;
+                border-width: 1px;
+            }
+
+            .list-item {
+                padding: 14px 16px;
+                border-width: 1px;
+            }
+
+            .birthday-item, .recipe-item, .appointment-detail {
+                padding: 18px 16px;
+                border-width: 1px;
+            }
+
             .modal-content {
-                padding: 32px 24px;
+                padding: 32px 20px;
+                border-width: 1px;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            .section-header h2 {
+                font-size: 24px;
+            }
+
+            .btn-small {
+                padding: 6px 12px;
+                font-size: 11px;
+            }
+
+            input, textarea {
+                font-size: 16px; /* Prevents iOS zoom on focus */
+            }
+
+            .calendar-container {
+                padding: 16px;
+            }
+
+            .calendar-grid {
+                gap: 4px;
+            }
+
+            .calendar-day {
+                padding: 2px;
+            }
+
+            .calendar-day-number {
+                font-size: 12px;
+            }
+
+            .appointment-detail {
+                padding: 16px;
+                border-left-width: 2px;
             }
         }
     </style>
@@ -455,6 +734,7 @@
         <div class="tabs">
             <button class="tab active" data-tab="shopping">Shopping</button>
             <button class="tab" data-tab="birthdays">Birthdays</button>
+            <button class="tab" data-tab="appointments">Appointments</button>
             <button class="tab" data-tab="recipes">Recipes</button>
         </div>
 
@@ -482,6 +762,30 @@
                     <button class="btn" onclick="changeMonth(1)">→</button>
                 </div>
                 <div class="birthday-list" id="birthdayList"></div>
+            </div>
+        </div>
+
+        <!-- Appointments Panel -->
+        <div class="panel" id="appointments">
+            <div class="section">
+                <div class="section-header">
+                    <h2>Appointments</h2>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button class="btn btn-small" onclick="openManageTypesModal()">Manage Types</button>
+                        <button class="btn btn-primary" onclick="openAddAppointmentModal()">+ Add Appointment</button>
+                    </div>
+                </div>
+                
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button class="btn btn-small" onclick="changeAppointmentMonth(-1)">←</button>
+                        <div class="calendar-month" id="appointmentMonth"></div>
+                        <button class="btn btn-small" onclick="changeAppointmentMonth(1)">→</button>
+                    </div>
+                    <div class="calendar-grid" id="calendarGrid"></div>
+                </div>
+
+                <div class="appointments-list" id="appointmentsList"></div>
             </div>
         </div>
 
@@ -547,15 +851,85 @@
         </div>
     </div>
 
+    <!-- Manage Types Modal -->
+    <div class="modal" id="manageTypesModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Manage Appointment Types</h2>
+                <button class="close" onclick="closeModal('manageTypesModal')">&times;</button>
+            </div>
+            <input type="text" id="newTypeName" placeholder="New type name">
+            <button class="btn btn-primary" onclick="addAppointmentType()">Add Type</button>
+            <div class="type-manager">
+                <div class="modal-section-title">Your Types</div>
+                <div class="type-list" id="typeList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Appointment Modal -->
+    <div class="modal" id="addAppointmentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="appointmentModalTitle">Add Appointment</h2>
+                <button class="close" onclick="closeModal('addAppointmentModal')">&times;</button>
+            </div>
+            
+            <div class="modal-section">
+                <input type="text" id="appointmentTitle" placeholder="Appointment title">
+            </div>
+
+            <div class="modal-section">
+                <div class="modal-section-title">Type</div>
+                <select id="appointmentType">
+                    <option value="">Select type...</option>
+                </select>
+            </div>
+
+            <div class="modal-section">
+                <div class="modal-section-title">Date & Time</div>
+                <input type="date" id="appointmentDate">
+                <input type="text" id="appointmentTime" placeholder="e.g., 2:30 PM or All day">
+            </div>
+
+            <div class="modal-section">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="appointmentRecurring">
+                    <span>Recurring appointment</span>
+                </label>
+            </div>
+
+            <div class="modal-section">
+                <div class="modal-section-title">Notes (optional)</div>
+                <textarea id="appointmentNotes" placeholder="Add any details or notes..." rows="3"></textarea>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-primary" onclick="saveAppointment()" style="flex: 1;">Save</button>
+                <button class="btn btn-danger" id="deleteAppointmentBtn" onclick="deleteAppointment()" style="display: none;">Delete</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         let data = {
             stores: {},
             birthdays: [],
-            recipes: []
+            recipes: [],
+            appointmentTypes: {},
+            appointments: []
         };
 
         let currentStore = null;
         let currentMonth = new Date();
+        let appointmentMonth = new Date();
+        let editingAppointment = null;
+
+        // Predefined colors for appointment types
+        const typeColors = [
+            '#6b9bd1', '#7ecaa3', '#e5a86f', '#d17b9b', '#9b87c7',
+            '#6bc9d1', '#c7a87e', '#87c79b', '#d1876b', '#9bd16b'
+        ];
 
         // Load data from storage
         function loadData() {
@@ -832,10 +1206,281 @@
             }).join('');
         }
 
+        // Appointment Type functions
+        function openManageTypesModal() {
+            document.getElementById('manageTypesModal').classList.add('active');
+            document.getElementById('newTypeName').value = '';
+            renderTypeList();
+        }
+
+        function addAppointmentType() {
+            const name = document.getElementById('newTypeName').value.trim();
+            if (!name) return;
+            
+            if (data.appointmentTypes[name]) {
+                alert('This type already exists');
+                return;
+            }
+            
+            const colorIndex = Object.keys(data.appointmentTypes).length % typeColors.length;
+            data.appointmentTypes[name] = typeColors[colorIndex];
+            
+            saveData();
+            renderTypeList();
+            renderAppointmentTypeSelect();
+            document.getElementById('newTypeName').value = '';
+        }
+
+        function deleteAppointmentType(typeName) {
+            if (confirm(`Delete "${typeName}" type? Existing appointments will keep their color.`)) {
+                delete data.appointmentTypes[typeName];
+                saveData();
+                renderTypeList();
+                renderAppointmentTypeSelect();
+            }
+        }
+
+        function renderTypeList() {
+            const list = document.getElementById('typeList');
+            const types = Object.keys(data.appointmentTypes);
+            
+            if (types.length === 0) {
+                list.innerHTML = '<p class="empty-state">No types yet</p>';
+                return;
+            }
+            
+            list.innerHTML = types.map(name => `
+                <div class="type-tag">
+                    <div class="type-color-box" style="background-color: ${data.appointmentTypes[name]}"></div>
+                    <span>${name}</span>
+                    <button class="btn btn-small btn-danger" onclick="deleteAppointmentType('${name}')" style="margin-left: 4px; padding: 2px 6px;">×</button>
+                </div>
+            `).join('');
+        }
+
+        function renderAppointmentTypeSelect() {
+            const select = document.getElementById('appointmentType');
+            const currentValue = select.value;
+            
+            select.innerHTML = '<option value="">Select type...</option>' + 
+                Object.keys(data.appointmentTypes).map(name => 
+                    `<option value="${name}">${name}</option>`
+                ).join('');
+            
+            if (currentValue) select.value = currentValue;
+        }
+
+        // Appointment functions
+        function openAddAppointmentModal() {
+            editingAppointment = null;
+            document.getElementById('appointmentModalTitle').textContent = 'Add Appointment';
+            document.getElementById('deleteAppointmentBtn').style.display = 'none';
+            document.getElementById('appointmentTitle').value = '';
+            document.getElementById('appointmentType').value = '';
+            document.getElementById('appointmentDate').value = '';
+            document.getElementById('appointmentTime').value = '';
+            document.getElementById('appointmentRecurring').checked = false;
+            document.getElementById('appointmentNotes').value = '';
+            renderAppointmentTypeSelect();
+            document.getElementById('addAppointmentModal').classList.add('active');
+        }
+
+        function editAppointment(id) {
+            const appointment = data.appointments.find(a => a.id === id);
+            if (!appointment) return;
+            
+            editingAppointment = id;
+            document.getElementById('appointmentModalTitle').textContent = 'Edit Appointment';
+            document.getElementById('deleteAppointmentBtn').style.display = 'block';
+            document.getElementById('appointmentTitle').value = appointment.title;
+            document.getElementById('appointmentDate').value = appointment.date;
+            document.getElementById('appointmentTime').value = appointment.time || '';
+            document.getElementById('appointmentRecurring').checked = appointment.recurring || false;
+            document.getElementById('appointmentNotes').value = appointment.notes || '';
+            
+            renderAppointmentTypeSelect();
+            document.getElementById('appointmentType').value = appointment.type;
+            
+            document.getElementById('addAppointmentModal').classList.add('active');
+        }
+
+        function saveAppointment() {
+            const title = document.getElementById('appointmentTitle').value.trim();
+            const type = document.getElementById('appointmentType').value;
+            const date = document.getElementById('appointmentDate').value;
+            const time = document.getElementById('appointmentTime').value.trim();
+            const recurring = document.getElementById('appointmentRecurring').checked;
+            const notes = document.getElementById('appointmentNotes').value.trim();
+            
+            if (!title || !type || !date) {
+                alert('Please fill in title, type, and date');
+                return;
+            }
+            
+            const appointmentData = {
+                title,
+                type,
+                date,
+                time,
+                recurring,
+                notes,
+                color: data.appointmentTypes[type]
+            };
+            
+            if (editingAppointment) {
+                const index = data.appointments.findIndex(a => a.id === editingAppointment);
+                if (index !== -1) {
+                    data.appointments[index] = { ...appointmentData, id: editingAppointment };
+                }
+            } else {
+                data.appointments.push({
+                    ...appointmentData,
+                    id: Date.now()
+                });
+            }
+            
+            data.appointments.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            saveData();
+            renderAppointments();
+            closeModal('addAppointmentModal');
+        }
+
+        function deleteAppointment() {
+            if (!editingAppointment) return;
+            
+            if (confirm('Delete this appointment?')) {
+                data.appointments = data.appointments.filter(a => a.id !== editingAppointment);
+                saveData();
+                renderAppointments();
+                closeModal('addAppointmentModal');
+            }
+        }
+
+        function changeAppointmentMonth(delta) {
+            appointmentMonth.setMonth(appointmentMonth.getMonth() + delta);
+            renderAppointments();
+        }
+
+        function renderAppointments() {
+            renderCalendar();
+            renderAppointmentsList();
+        }
+
+        function renderCalendar() {
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                              'July', 'August', 'September', 'October', 'November', 'December'];
+            
+            document.getElementById('appointmentMonth').textContent = 
+                `${monthNames[appointmentMonth.getMonth()]} ${appointmentMonth.getFullYear()}`;
+            
+            const grid = document.getElementById('calendarGrid');
+            
+            // Day labels
+            const dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const labelsHTML = dayLabels.map(day => 
+                `<div class="calendar-day-label">${day}</div>`
+            ).join('');
+            
+            // Get first day of month and number of days
+            const year = appointmentMonth.getFullYear();
+            const month = appointmentMonth.getMonth();
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const daysInPrevMonth = new Date(year, month, 0).getDate();
+            
+            const today = new Date();
+            const isCurrentMonth = today.getMonth() === month && today.getFullYear() === year;
+            
+            // Build calendar days
+            let daysHTML = '';
+            
+            // Previous month days
+            for (let i = firstDay - 1; i >= 0; i--) {
+                const day = daysInPrevMonth - i;
+                daysHTML += `<div class="calendar-day other-month"><div class="calendar-day-number">${day}</div></div>`;
+            }
+            
+            // Current month days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dayAppointments = data.appointments.filter(a => a.date === dateStr);
+                const isToday = isCurrentMonth && today.getDate() === day;
+                
+                const dotsHTML = dayAppointments.slice(0, 3).map(apt => 
+                    `<div class="calendar-dot" style="background-color: ${apt.color}"></div>`
+                ).join('');
+                
+                daysHTML += `
+                    <div class="calendar-day ${isToday ? 'today' : ''}" onclick="scrollToDate('${dateStr}')">
+                        <div class="calendar-day-number">${day}</div>
+                        <div class="calendar-day-dots">${dotsHTML}</div>
+                    </div>
+                `;
+            }
+            
+            // Next month days
+            const totalCells = firstDay + daysInMonth;
+            const remainingCells = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+            for (let day = 1; day <= remainingCells; day++) {
+                daysHTML += `<div class="calendar-day other-month"><div class="calendar-day-number">${day}</div></div>`;
+            }
+            
+            grid.innerHTML = labelsHTML + daysHTML;
+        }
+
+        function scrollToDate(dateStr) {
+            const element = document.getElementById(`apt-${dateStr}`);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function renderAppointmentsList() {
+            const list = document.getElementById('appointmentsList');
+            const year = appointmentMonth.getFullYear();
+            const month = appointmentMonth.getMonth();
+            
+            const monthAppointments = data.appointments.filter(a => {
+                const aptDate = new Date(a.date);
+                return aptDate.getMonth() === month && aptDate.getFullYear() === year;
+            });
+            
+            if (monthAppointments.length === 0) {
+                list.innerHTML = '<p class="empty-state">No appointments this month</p>';
+                return;
+            }
+            
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                              'July', 'August', 'September', 'October', 'November', 'December'];
+            
+            list.innerHTML = monthAppointments.map(apt => {
+                const aptDate = new Date(apt.date);
+                const dateStr = `${monthNames[aptDate.getMonth()]} ${aptDate.getDate()}, ${aptDate.getFullYear()}`;
+                
+                return `
+                    <div class="appointment-detail" id="apt-${apt.date}" style="border-left-color: ${apt.color}" onclick="editAppointment(${apt.id})">
+                        <div class="appointment-header">
+                            <div>
+                                <div class="appointment-title">${apt.title}</div>
+                                <div class="appointment-time">${dateStr}${apt.time ? ' • ' + apt.time : ''}</div>
+                                <div class="appointment-type" style="background-color: ${apt.color}33; color: ${apt.color}">
+                                    ${apt.type}
+                                    ${apt.recurring ? '<span class="recurring-badge">↻ Recurring</span>' : ''}
+                                </div>
+                            </div>
+                        </div>
+                        ${apt.notes ? `<div class="appointment-notes">${apt.notes}</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
         function renderAll() {
             renderStores();
             renderBirthdays();
             renderRecipes();
+            renderAppointments();
         }
 
         // Initialize
