@@ -1215,11 +1215,19 @@
 
         function addAppointmentType() {
             const name = document.getElementById('newTypeName').value.trim();
-            if (!name) return;
+            if (!name) {
+                alert('Please enter a type name');
+                return;
+            }
             
             if (data.appointmentTypes[name]) {
                 alert('This type already exists');
                 return;
+            }
+            
+            // Initialize appointmentTypes if it doesn't exist
+            if (!data.appointmentTypes) {
+                data.appointmentTypes = {};
             }
             
             const colorIndex = Object.keys(data.appointmentTypes).length % typeColors.length;
@@ -1242,10 +1250,16 @@
 
         function renderTypeList() {
             const list = document.getElementById('typeList');
+            
+            // Initialize appointmentTypes if it doesn't exist
+            if (!data.appointmentTypes) {
+                data.appointmentTypes = {};
+            }
+            
             const types = Object.keys(data.appointmentTypes);
             
             if (types.length === 0) {
-                list.innerHTML = '<p class="empty-state">No types yet</p>';
+                list.innerHTML = '<p class="empty-state" style="padding: 20px 0; text-align: left;">No types yet</p>';
                 return;
             }
             
@@ -1261,6 +1275,11 @@
         function renderAppointmentTypeSelect() {
             const select = document.getElementById('appointmentType');
             const currentValue = select.value;
+            
+            // Initialize appointmentTypes if it doesn't exist
+            if (!data.appointmentTypes) {
+                data.appointmentTypes = {};
+            }
             
             select.innerHTML = '<option value="">Select type...</option>' + 
                 Object.keys(data.appointmentTypes).map(name => 
