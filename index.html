@@ -558,11 +558,11 @@
         let currentMonth = new Date();
 
         // Load data from storage
-        async function loadData() {
+        function loadData() {
             try {
-                const result = await window.storage.get('command-center-data');
-                if (result && result.value) {
-                    data = JSON.parse(result.value);
+                const saved = localStorage.getItem('command-center-data');
+                if (saved) {
+                    data = JSON.parse(saved);
                 }
             } catch (error) {
                 console.log('No existing data, starting fresh');
@@ -571,9 +571,9 @@
         }
 
         // Save data to storage
-        async function saveData() {
+        function saveData() {
             try {
-                await window.storage.set('command-center-data', JSON.stringify(data));
+                localStorage.setItem('command-center-data', JSON.stringify(data));
             } catch (error) {
                 console.error('Error saving data:', error);
             }
