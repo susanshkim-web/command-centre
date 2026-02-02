@@ -29,6 +29,49 @@
 
         header {
             margin-bottom: 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .backup-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            padding: 7px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e8e6e3;
+            cursor: pointer;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            display: inline-block;
+        }
+
+        .file-input-label:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
         }
 
         h1 {
@@ -644,6 +687,17 @@
                 padding: 40px 20px;
             }
 
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                margin-bottom: 60px;
+            }
+
+            .backup-controls {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
             h1 {
                 font-size: 36px;
             }
@@ -698,6 +752,11 @@
                 font-size: 11px;
             }
 
+            .file-input-label {
+                padding: 6px 12px;
+                font-size: 11px;
+            }
+
             input, textarea {
                 font-size: 16px; /* Prevents iOS zoom on focus */
             }
@@ -729,6 +788,13 @@
     <div class="container">
         <header>
             <h1>Command Center</h1>
+            <div class="backup-controls">
+                <button class="btn btn-small" onclick="exportData()">Export Backup</button>
+                <div class="file-input-wrapper">
+                    <input type="file" id="importFile" accept=".json" onchange="importData(event)">
+                    <label for="importFile" class="file-input-label">Import Backup</label>
+                </div>
+            </div>
         </header>
 
         <div class="tabs">
@@ -1497,6 +1563,118 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        // Backup functions
+        function exportData() {
+            const backupData = {
+                birthdays: data.birthdays,
+                appointments: data.appointments,
+                appointmentTypes: data.appointmentTypes,
+                exportDate: new Date().toISOString(),
+                version: '1.0'
+            };
+            
+            const dataStr = JSON.stringify(backupData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `command-center-backup-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const backupData = JSON.parse(e.target.result);
+                    
+                    // Validate backup data
+                    if (!backupData.birthdays && !backupData.appointments) {
+                        alert('Invalid backup file');
+                        return;
+                    }
+                    
+                    // Confirm import
+                    const message = `Import backup from ${new Date(backupData.exportDate).toLocaleDateString()}?\n\n` +
+                                  `This will:\n` +
+                                  `- Add ${backupData.birthdays?.length || 0} birthdays\n` +
+                                  `- Add ${backupData.appointments?.length || 0} appointments\n` +
+                                  `- Add ${Object.keys(backupData.appointmentTypes || {}).length} appointment types\n\n` +
+                                  `Existing data will be kept (no duplicates will be merged automatically).`;
+                    
+                    if (!confirm(message)) return;
+                    
+                    // Import birthdays
+                    if (backupData.birthdays && Array.isArray(backupData.birthdays)) {
+                        backupData.birthdays.forEach(birthday => {
+                            // Check if birthday already exists (by name and date)
+                            const exists = data.birthdays.some(b => 
+                                b.name === birthday.name && b.date === birthday.date
+                            );
+                            if (!exists) {
+                                data.birthdays.push({
+                                    ...birthday,
+                                    id: Date.now() + Math.random() // New unique ID
+                                });
+                            }
+                        });
+                        data.birthdays.sort((a, b) => {
+                            const dateA = new Date(a.date);
+                            const dateB = new Date(b.date);
+                            return dateA.getMonth() - dateB.getMonth() || dateA.getDate() - dateB.getDate();
+                        });
+                    }
+                    
+                    // Import appointment types
+                    if (backupData.appointmentTypes) {
+                        Object.keys(backupData.appointmentTypes).forEach(typeName => {
+                            if (!data.appointmentTypes[typeName]) {
+                                data.appointmentTypes[typeName] = backupData.appointmentTypes[typeName];
+                            }
+                        });
+                    }
+                    
+                    // Import appointments
+                    if (backupData.appointments && Array.isArray(backupData.appointments)) {
+                        backupData.appointments.forEach(appointment => {
+                            // Check if appointment already exists (by title, date, and type)
+                            const exists = data.appointments.some(a => 
+                                a.title === appointment.title && 
+                                a.date === appointment.date && 
+                                a.type === appointment.type
+                            );
+                            if (!exists) {
+                                data.appointments.push({
+                                    ...appointment,
+                                    id: Date.now() + Math.random() // New unique ID
+                                });
+                            }
+                        });
+                        data.appointments.sort((a, b) => new Date(a.date) - new Date(b.date));
+                    }
+                    
+                    saveData();
+                    renderAll();
+                    alert('Backup imported successfully!');
+                    
+                } catch (error) {
+                    console.error('Import error:', error);
+                    alert('Error importing backup file. Make sure it\'s a valid backup.');
+                }
+            };
+            reader.readAsText(file);
+            
+            // Reset file input
+            event.target.value = '';
         }
 
         function renderAll() {
