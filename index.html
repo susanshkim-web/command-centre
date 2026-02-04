@@ -1568,7 +1568,9 @@
         // Backup functions
         function exportData() {
             const backupData = {
+                stores: data.stores,
                 birthdays: data.birthdays,
+                recipes: data.recipes,
                 appointments: data.appointments,
                 appointmentTypes: data.appointmentTypes,
                 exportDate: new Date().toISOString(),
@@ -1598,32 +1600,61 @@
                     const backupData = JSON.parse(e.target.result);
                     
                     // Validate backup data
-                    if (!backupData.birthdays && !backupData.appointments) {
+                    if (!backupData.birthdays && !backupData.appointments && !backupData.stores && !backupData.recipes) {
                         alert('Invalid backup file');
                         return;
                     }
                     
+                    // Count items
+                    const counts = {
+                        stores: backupData.stores ? Object.keys(backupData.stores).length : 0,
+                        birthdays: backupData.birthdays?.length || 0,
+                        appointments: backupData.appointments?.length || 0,
+                        appointmentTypes: backupData.appointmentTypes ? Object.keys(backupData.appointmentTypes).length : 0,
+                        recipes: backupData.recipes?.length || 0
+                    };
+                    
                     // Confirm import
                     const message = `Import backup from ${new Date(backupData.exportDate).toLocaleDateString()}?\n\n` +
-                                  `This will:\n` +
-                                  `- Add ${backupData.birthdays?.length || 0} birthdays\n` +
-                                  `- Add ${backupData.appointments?.length || 0} appointments\n` +
-                                  `- Add ${Object.keys(backupData.appointmentTypes || {}).length} appointment types\n\n` +
+                                  `This will add:\n` +
+                                  `- ${counts.stores} store(s)\n` +
+                                  `- ${counts.birthdays} birthday(s)\n` +
+                                  `- ${counts.appointments} appointment(s)\n` +
+                                  `- ${counts.appointmentTypes} appointment type(s)\n` +
+                                  `- ${counts.recipes} recipe(s)\n\n` +
                                   `Existing data will be kept (no duplicates will be merged automatically).`;
                     
                     if (!confirm(message)) return;
                     
+                    // Import stores
+                    if (backupData.stores) {
+                        Object.keys(backupData.stores).forEach(storeName => {
+                            if (!data.stores[storeName]) {
+                                data.stores[storeName] = [];
+                            }
+                            // Add items from backup that don't exist
+                            backupData.stores[storeName].forEach(item => {
+                                const exists = data.stores[storeName].some(i => i.name === item.name);
+                                if (!exists) {
+                                    data.stores[storeName].push({
+                                        ...item,
+                                        id: Date.now() + Math.random()
+                                    });
+                                }
+                            });
+                        });
+                    }
+                    
                     // Import birthdays
                     if (backupData.birthdays && Array.isArray(backupData.birthdays)) {
                         backupData.birthdays.forEach(birthday => {
-                            // Check if birthday already exists (by name and date)
                             const exists = data.birthdays.some(b => 
                                 b.name === birthday.name && b.date === birthday.date
                             );
                             if (!exists) {
                                 data.birthdays.push({
                                     ...birthday,
-                                    id: Date.now() + Math.random() // New unique ID
+                                    id: Date.now() + Math.random()
                                 });
                             }
                         });
@@ -1646,7 +1677,6 @@
                     // Import appointments
                     if (backupData.appointments && Array.isArray(backupData.appointments)) {
                         backupData.appointments.forEach(appointment => {
-                            // Check if appointment already exists (by title, date, and type)
                             const exists = data.appointments.some(a => 
                                 a.title === appointment.title && 
                                 a.date === appointment.date && 
@@ -1655,11 +1685,26 @@
                             if (!exists) {
                                 data.appointments.push({
                                     ...appointment,
-                                    id: Date.now() + Math.random() // New unique ID
+                                    id: Date.now() + Math.random()
                                 });
                             }
                         });
                         data.appointments.sort((a, b) => new Date(a.date) - new Date(b.date));
+                    }
+                    
+                    // Import recipes
+                    if (backupData.recipes && Array.isArray(backupData.recipes)) {
+                        backupData.recipes.forEach(recipe => {
+                            const exists = data.recipes.some(r => 
+                                r.name === recipe.name && r.date === recipe.date
+                            );
+                            if (!exists) {
+                                data.recipes.unshift({
+                                    ...recipe,
+                                    id: Date.now() + Math.random()
+                                });
+                            }
+                        });
                     }
                     
                     saveData();
